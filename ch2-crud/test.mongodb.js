@@ -20,18 +20,18 @@ db.users.insertOne({
 });
 
 // 조회
-// db.[테이블명].find({조건})
+// db.[컬렉션명].find({조건})
 db.users.find();
 
 //수정
-// db.[테이블명].updateOne({조건}, {수정할 값})
+// db.[컬렉션명].updateOne({조건}, {수정할 값})
 db.users.updateOne(
   { name: "홍길동" }, // 조건
   { $set: { age: 30 } } // 수정할 값
 );
 
 // 삭제
-// db.[테이블명].deleteOne({조건})
+// db.[컬렉션명].deleteOne({조건})
 db.users.deleteOne({ name: "홍길동" }); // 조건에 맞는 첫 번째 문서 삭제
 
 // Capped Collection, 컬렉션 = 테이블
@@ -40,7 +40,7 @@ db.users.deleteOne({ name: "홍길동" }); // 조건에 맞는 첫 번째 문서
 //  용량이 5KB인 컬렉션 생성, 부가 기능으로 용량 초과시 오래된 데이터 삭제
 db.createCollection("logs3", { capped: true, size: 5000 }); // 5KB
 // 샘플 데이터 추가, 반복문을 이용해서, 샘플로 1000개 추가
-for (let i = 0; i < 1000; i++) {
+for (let i = 0; i < 100000000000; i++) {
   db.logs3.insertOne({
     // 로그 메시지 감싸는 기호는 백틱(`) 사용
     message: `로그 메시지 ${i}`,
@@ -88,3 +88,6 @@ db.users2.updateOne(
 db.users2.deleteOne({ name: "이상용 수정3" }); // 조건에 맞는 첫 번째 문서 삭제
 // ===========================================================
 db.users2.find(); // 전체 조회
+
+// ==========================================================
+db.serverStatus();
