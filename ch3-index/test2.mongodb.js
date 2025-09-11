@@ -4,7 +4,7 @@
 
 
 
-    for(let i = 0; i < 100000; i++) {
+    for(let i = 0; i < 1000000; i++) {
     db.products.insertOne({
         name: "Product_" + i,
         category: (i % 5 == 0) ? "Electronics" : "Home",
@@ -34,17 +34,25 @@ print("인덱스 없이 검색 시간: " + (end - start) + "ms");
 // 1_Single - key Index(단일 필드 인덱스)
 
 db.products.createIndex({ category: 1 });
-db.users.getIndexes()
+db.products.getIndexes()
 
 // ✅ 단일 필드 인덱스: category 필드에 대해 인덱스를 생성하여 검색 최적화
 
 // 2_Compound Index(복합 인덱스)
 
-
-
+db.products.getIndexes()
+db.products.dropIndex("category_1_price_-1")
 db.products.createIndex({ category: 1, price: -1 });
 // ✅ category와 price를 조합하여 검색 최적화
 // ✅ price는 내림차순(-1) 정렬
+
+var start = new Date();
+db.products.find(
+    { category: "Electronics", 
+        price: {$lt : 3000} }
+).explain("executionStats");
+var end = new Date();
+print("복합 인덱스 사용 후 가격 추가 검색 시간: " + (end - start) + "ms");
 
 // 3_Non - Unique Index vs Unique Index
 
