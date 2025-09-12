@@ -52,8 +52,10 @@
 // 📌 기본 문법
 
 // db.collection.aggregate([
-//     { Stage_1 },
-//     { Stage_2 },
+//     { Stage_1 },---- 분류 결과를 전달
+//                    |
+//                    |
+//     { Stage_2 }, <-| 전달 받은 값으로 , 연산, 이런식으로 각 스테이지에 전달하기.
 //     { Stage_3 }
 // ])
 
@@ -126,8 +128,11 @@ db.sales.insertMany([
 ]);
 
 db.sales.aggregate([
-  { $match: { region: "Asia" } },
+  { $match: { region: "Asia" } }, // 전체 데이터 10개 중에서 -> Asia (약6개)만 선택된 데이터들, 다음 스테이지로 전달.
+  // 2번째 스테이지스에서는 첫번째 스테이지에서 전달 받은 6개 데이터를 가지고, 연산. 상품별로, 매출 총 합계 계산 후
+  // 다음 스테이지로 연산 결과를 전달
   { $group: { _id: "$product", totalSales: { $sum: "$amount" } } },
+  // 3번째 스테이지는 전달 받은 연산 결과를 가지고, 정렬을 진행.
   { $sort: { totalSales: -1 } },
 ]);
 
@@ -724,8 +729,8 @@ db.locations.aggregate([
     $geoNear: {
       near: { type: "Point", coordinates: [126.9784, 37.5665] },
       distanceField: "distance",
-      maxDistance: 5000,
-      spherical: true,
+      maxDistance: 5000, // 미터 단위라서, 5000미터, 5km 반경
+      spherical: true, // 구면 계산, 지구처럼 둥근 표면을 기준으로 거리를 계산, 미터 단위로 정확히 계산
     },
   },
 ]);
@@ -834,7 +839,7 @@ db.salesB.aggregate([
 
   { $unwind: "$userDetails" },
 
-  { $replaceRoot: { newRoot: "$userDetails" } },
+  // { $replaceRoot: { newRoot: "$userDetails" } },
 ]);
 
 // 출력 예시
@@ -914,12 +919,18 @@ db.users2.aggregate([
 db.salesB.aggregate([
   {
     $setWindowFields: {
-      partitionBy: "$category",
-      sortBy: { date: 1 },
+      partitionBy: "$category", // 그룹 나누기
+      sortBy: { date: 1 }, // 각 그룹 내에서 순서 정하기.
       output: {
+        // 어떤 값을 계산해서 추가할지 정의 하는 부분.
         runningTotal: {
-          $sum: "$amount",
+          // 새로 추가될 필드의 이름.
+          $sum: "$amount", // 필드의 합계 구하기.
+          // 계산의 범위를 지정하는 핵심 부분.
+          //unbounded : 파티션의 처음부터,
+          // current : 현재 처리 중인 문서까지.
           window: { documents: ["unbounded", "current"] },
+          // 결론, 그룹의 첫 문서부터 현재 문서까지의 모든 amount 를 더하기 하기. =누적합계
         },
       },
     },
