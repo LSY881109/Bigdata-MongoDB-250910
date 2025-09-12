@@ -1,7 +1,7 @@
 // ✅ 1. 대량 데이터 추가(반복문 사용)
 // 먼저, db.products 컬렉션에 100,000개의 샘플 데이터를 삽입합니다.
 
-for (let i = 0; i < 1000000; i++) {
+for (let i = 0; i < 100000; i++) {
   db.products.insertOne({
     name: "Product_" + i,
     category: i % 5 == 0 ? "Electronics" : "Home",
