@@ -4,7 +4,7 @@ https://www.mongodb.com/try/download/community
 
 현재 버전 : 8.0.4
 
--쉘 다운로드
+-쉘 다운로드, msi 설치, 윈도우즈 기준. 
 https://www.mongodb.com/try/download/shell
 
 1) 윈도우즈 기반, 8.0.4 버전으로 연습, 
