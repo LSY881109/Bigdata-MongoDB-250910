@@ -168,11 +168,17 @@ replication :
 
 
 클라이언트에서 연결 
+주의사항!!
+몽고스, 중개 라우터, 디비서버 시작 해야함. 
 
 mongos 설정하기. - 상용5
 
 localhost -> 상용1
+================================================================
+주의사항!!
+몽고스, 중개 라우터, 디비서버 시작 해야함. 
 mongos --configdb config0/localhost:27018 --port 20000
+================================================================
 
 mongos --configdb config0/10.100.201.87:27018 --port 20000
 
@@ -308,12 +314,16 @@ shard0:PRIMARY> db.test.count()
 테이블, 데이터베이스 설정 참고, !!!
 
 -- 참고, 이미지 파일 저장 시, 
+순서1
 // "files_id"를 기준으로 fs.chunks 컬렉션을 샤딩합니다.
 sh.shardCollection("test2345.fs.chunks", { "files_id": 1 });
 
 
+순서2
 db.fs.files.createIndex({ "_id": "hashed" })
 // "_id"를 기준으로 fs.files 컬렉션을 샤딩합니다.
+
+순서3
 sh.shardCollection("test2345.fs.files", { "_id": "hashed" });
 
 
