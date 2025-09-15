@@ -319,6 +319,7 @@ shard0:PRIMARY> db.test.count()
 //sh.shardCollection("test2345.fs.chunks", { "files_id": 1 });
 sh.shardCollection("test2345.fs.chunks", { files_id: 1, n: 1 })
 
+===============================================================
 // 기존 설정 삭제 예시, 
 // mongos 셸에서 실행
 // 1. fs.chunks 컬렉션 삭제
@@ -326,6 +327,9 @@ db.getSiblingDB('test2345').fs.chunks.drop()
 
 // 2. fs.files 컬렉션 삭제
 db.getSiblingDB('test2345').fs.files.drop()
+
+// , 순서4 로 가서, 한번더 등록 하기.
+===============================================================
 
 // 수정, 분산 저장 용. 
 // 파일 ID(files_id)와 청크 순번(n)을 결합한 복합 샤드 키를 사용
