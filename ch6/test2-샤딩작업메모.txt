@@ -343,7 +343,8 @@ db.fs.files.createIndex({ "_id": "hashed" })
 순서3
 sh.shardCollection("test2345.fs.files", { "_id": "hashed" });
 
-
+db.fs.files.getShardDistribution()
+db.fs.chunks.getShardDistribution()
 ========================================================
 
 =======================================================
